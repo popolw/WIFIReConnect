@@ -7,7 +7,7 @@ namespace WIFIReConnect
 {
     public class WIFIService : BackgroundService
     {
-        protected readonly ILogger _logger;
+        private readonly ILogger _logger;
         private readonly string _wifi;
         private readonly int _checkCycle;
         public WIFIService(IConfiguration configuration, ILogger<WIFIService> logger)
