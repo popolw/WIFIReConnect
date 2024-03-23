@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WIFIReConnect": {
+      "commandName": "Project",
+      "commandLineArgs": "--WIFI ZTE_C864BC --CheckCycle 5"
+    }
+  }
+}

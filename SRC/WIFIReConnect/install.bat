@@ -1,0 +1,2 @@
+sc create TI_WIFIReConnectService binPath="WIFIReConnect.exe --WIFI ZTE_C864BC --CheckCycle 5" DisplayName= "TI_WIFIReConnectService" start=auto
+sc description TI_WIFIReConnectService "KUQI ROBOT AUTO REConnection TO TI WIFI"
