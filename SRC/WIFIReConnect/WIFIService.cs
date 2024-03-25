@@ -29,19 +29,28 @@ namespace WIFIReConnect
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                var profile = NativeWifi.EnumerateProfileRadios().Where(p => p.Document.Ssid.ToString() == _wifi).FirstOrDefault();
-                if (profile!=null && !profile.Interface.IsConnected)
+                try
                 {
-                    _logger.LogInformation($"WIFI {_wifi} 未链接,信号质量:{profile.SignalQuality},尝试链接到该WIFI");
-                    var success = await NativeWifi.ConnectNetworkAsync(profile.Interface.Id, profile.Name, profile.Document.BssType, TimeSpan.FromSeconds(4));
-                    if (success)
+                    var profile = NativeWifi.EnumerateProfileRadios().Where(p => p.Document.Ssid.ToString() == _wifi).FirstOrDefault();
+                    if (profile != null && !profile.Interface.IsConnected)
                     {
-                        _logger.LogInformation($"WIFI {profile.Document.Ssid} 链接成功");
+                        _logger.LogInformation($"WIFI {_wifi} 未链接,信号质量:{profile.SignalQuality},尝试链接到该WIFI");
+                        var success = await NativeWifi.ConnectNetworkAsync(profile.Interface.Id, profile.Name, profile.Document.BssType, TimeSpan.FromSeconds(4));
+                        if (success)
+                        {
+                            _logger.LogInformation($"WIFI {profile.Document.Ssid} 链接成功");
+                        }
+                        else
+                        {
+                            _logger.LogWarning($"WIFI {profile.Document.Ssid} 链接失败");
+                        }
                     }
-                    else
-                    {
-                        _logger.LogWarning($"WIFI {profile.Document.Ssid} 链接失败");
-                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    await Task.Delay(TimeSpan.FromMinutes(1));
+                    continue;
                 }
                 await Task.Delay(TimeSpan.FromSeconds(this._checkCycle));
             }
